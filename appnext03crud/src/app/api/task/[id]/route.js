@@ -1,12 +1,30 @@
 import { NextResponse } from "next/server";
+import prisma from "@libs/prisma";
 
-export function GET(request, { params }) {
-  return NextResponse.json("obtain task" + params.id);
+export async function GET(request, { params }) {
+  const taskid = await prisma.task.findunique({
+    where: { id: Number(params.id) },
+  });
+  return NextResponse.json(taskid);
 }
 
-export function DELETE(request, { params }) {
-  return NextResponse.json("delete task" + params.id);
+export async function PUT(request, { params }) {
+  const data = await request.json();
+  const taskUpdate = await prisma.task.update({
+    where: {
+      id: Number(params.id),
+    },
+    data: data,
+  });
+  return NextResponse.json(taskUpdate);
 }
-export function PUT(request, { params }) {
-  return NextResponse.json("refresh task" + params.id);
+export async function DELETE(request, { params }) {
+  try {
+    const taskdelete = await prisma.task.delete({
+      where: { id: Number(params.id) },
+    });
+    return NextResponse.json(taskdelete);
+  } catch (error) {
+    return NextResponse.json(error.message);
+  }
 }
