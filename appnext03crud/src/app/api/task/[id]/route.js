@@ -1,8 +1,8 @@
+import { prisma } from "@/libs/prisma";
 import { NextResponse } from "next/server";
-import prisma from "@libs/prisma";
 
 export async function GET(request, { params }) {
-  const taskid = await prisma.task.findunique({
+  const taskid = await prisma.task.findUnique({
     where: { id: Number(params.id) },
   });
   return NextResponse.json(taskid);
